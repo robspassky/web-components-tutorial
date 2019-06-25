@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <title>Custom Elements API</title>
+<style>
+  .code {
+    background: lightblue;
+    border: solid 1px black;
+    width: 35em;
+    height: 17em;
+  }
+  .my-button {
+    background: lightgreen;
+    border: solid 1px black;
+  }
+</style>
+  </head>
+  <body>
+    <h1>Custom Elements API</h1>
+    <h3>The Custom Elements API allows you to create your own HTML5 elements and attach some logic to them. Each such element will have a Shadow Root with content provided by a Template.</h3>
+    <h3>Exercise</h3>
+    <ol>
+      <li>We will create a new &lt;my-button&gt; element
+    <textarea readonly class="code">
+window.customElements.define('my-button',
+  class extends HTMLElement {
+    constructor() {
+      super();
+      let copyOfTemplate = document
+        .getElementById('button_template')
+        .content
+        .cloneNode(true)
+      let shadowRoot = this.attachShadow({mode: 'open'}).appendChild(copyOfTemplate)
+    }
+  }
+)
+    </textarea>
+    <p>Some important rules with this:</p>
+    <ul>
+      <li>The names of custom elements must contain a "-" (aka "dash"). This distinguishes them from the standard HTML elements</li>
+      <li>All custom elements must be defined as a class</li>
+      <li>For now, the class needs to be a direct child of HTMLElement or it won't work in Safari (Apple so far refuses to implement anything else)</li>
+      <li>There are various <a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements#Using_the_lifecycle_callbacks">lifecycle APIs</a> (similar to a React component)</li>
+    </ul>
+      </li>
+      <li>Now we will append a new "my-button" to the document.</li>
+    <textarea readonly class="code">
+x = document.createElement('my-button')
+document.body.appendChild(x)
+
+// or, if you can edit the HTML directly
+
+<my-button></button>
+
+// note that you cannot use the empty element shorthand
+
+<my-button/>  // this won't work
+    </textarea>
+      <li>Note that if you use a custom element before it is defined, the result will be treated like an empty &lt;div&gt;. And when you do define the element, it will automatically be replaced by the newly defined custom element. Thus it does not matter what order you define / use the custom elements (if you do not care about the Flash of Unstyled Content)</li>
+    </ol>
+    <h3>Extra Credit</h3>
+    <ul>
+      <li>In #1, we defined the class inline to the API call. In reality it's more likely the class will be defined separately. Try to write my-button as a separate class.</li>
+      <li>Try to write it all in a separate javascript file</li>
+    </ul>
+    <h3>Next: <a href="/modules.html">Javascript Modules</a></h3>
+    <template id="button_template">
+      <div class="my-button">
+        <p class="my-button-name"><slot name="name">I don't have a name</slot></p>
+        <p><slot name="description">I don't have a description</slot></p>
+        <button><slot name="label">Press me</slot></button>
+      </div>
+    </template>
+    <hr>
+  </body>
+</html>

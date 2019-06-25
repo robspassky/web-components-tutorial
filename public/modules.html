@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <title>Javascript Modules</title>
+<style>
+  .code {
+    background: lightblue;
+    border: solid 1px black;
+    width: 35em;
+    height: 37em;
+  }
+  .my-button {
+    background: lightgreen;
+    border: solid 1px black;
+  }
+</style>
+  </head>
+  <body>
+    <h1>Javascript Modules</h1>
+    <h3>Modules provide a safer way of adding javascript functionality to a page without polluting the global namespace, by allowing modules to specify exactly what variables, methods, and or class(es) are externally visible. Loading a module can be done either with a javascript command or with a script tag. If using a tag, a new attribute <tt>type="module"</tt> must be added.</h3>
+    <p>There is some different behavior with modules:</p>
+    <ol>
+      <li>Code in a module is automatically put in <tt>use strict</tt> mode</li>
+      <li>Code in a module cannot touch the "global" scope.</li>
+      <li>Only code in a module can use import/export commands</li>
+    </ol>
+    <h3>Exercise</h3>
+    <p>This page contains a <tt>my-button</tt> element at the bottom. However, you won't see it until you define a custom element for it.</p>
+    <p>A javascript module has already been created in <tt>my-button.js</tt>. You just need to load it onto the page.</p>
+    <textarea class="code">
+const id = 'button_template'
+const html = `<div class="my-button">
+  <p class="my-button-name">I don't have a name</p>
+  <p>I have not pressed the button</p>
+  <button>Press me</button>
+</div>
+`
+
+function create_template_if_it_does_not_exist() {
+  if (!document.querySelector(`#${id}`)) {
+    let x = document.createElement('template')
+    x.id = id
+    x.innerHTML = html
+    document.body.appendChild(x)
+  }
+}
+
+class MyButton extends HTMLElement {
+  constructor() {
+    super();
+    create_template_if_it_does_not_exist()
+    let copyOfTemplate = document
+      .getElementById('button_template')
+      .content
+      .cloneNode(true)
+    let shadowRoot = this.attachShadow({mode: 'open'}).appendChild(copyOfTemplate)
+  }
+}
+
+export { MyButton }
+    </textarea>
+    <p>This can be imported to the page using the following code</p>
+    <textarea class="code" style="height:6em">
+<script type="module">
+  import { MyButton } from './my-button.js'
+  window.customElements.define('my-button', MyButton)
+</script>
+    </textarea>
+    <p>However, you cannot use this form of import from the developer console (see #3 at the top of this page).</p>
+    <p>Instead, open the developer console and use the following code:</p>
+    <textarea class="code" style="height:10em">
+import('./my-button.js')
+  .then(module => 
+    global_module = module
+  )
+window
+  .customElements
+  .define('my-button', global_module.MyButton)
+    </textarea>
+    <!--
+    <h3>Extra Credit</h3>
+    <h3>Next: <a href="/slots.html">Advanced: Slots</a></h3>
+    -->
+    <hr>
+    <my-button></my-button>
+  </body>
+</html>

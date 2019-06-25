@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <title>Templates</title>
+<style>
+  .code {
+    background: lightblue;
+    border: solid 1px black;
+    width: 35em;
+    height: 9em;
+  }
+  .my-button {
+    background: lightgreen;
+    border: solid 1px black;
+  }
+</style>
+  </head>
+  <body>
+    <h1>Templates</h1>
+    <h3>A web template is an HTML element that won't be rendered, but can easily be copied, modified, and inserted into the document many times.</h3>
+    <p>The following template has been created in this page, but you won't see it rendered:</p>
+    <textarea readonly class="code">
+    <template id="button_template">
+      <div class="my-button">
+        <p class="my-button-name"></p>
+        <p>I have not pressed the button</p>
+        <button>Press me</button>
+      </div>
+    </template>
+    </textarea>
+    <h3>Exercise</h3>
+    <p>However, you can easily clone and insert this template into the page many times. Open up the developer console and try it:</p>
+    <textarea class="code">
+t = document.querySelector('#button_template')
+copyOfTemplate = t.content.cloneNode(true)
+document.body.appendChild(copyOfTemplate)
+    </textarea>
+    <h3>Extra Credit</h3>
+    <ol>
+      <li>Create a function to do the above</li>
+      <li>Pass a numeric id and string name to the function and customize each time you add to the document</li>
+    </ol>
+    <h3>Next: <a href="/shadow-dom.html">Shadow DOM</a></h3>
+    <template id="button_template">
+      <div class="my-button">
+        <p class="my-button-name">I don't have a name</p>
+        <p>I have not pressed the button</p>
+        <button>Press me</button>
+      </div>
+    </template>
+    <hr>
+  </body>
+</html>

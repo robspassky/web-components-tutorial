@@ -1,0 +1,64 @@
+<html>
+  <head>
+    <title>Shadow DOM</title>
+    <style>
+      .code {
+        background: lightblue;
+        border: solid 1px black;
+        width: 55em;
+        height: 9em;
+      }
+      .my-button {
+        background: lightgreen;
+        border: solid 1px black;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Shadow DOM</h1>
+    <p>In order to be useful, web components need to be a "black box" that the main document does not need to know anything about.</p>
+    <p>As an example, consider the built-in video element controls:</p>
+    <video controls width="250">
+      <source src="/media/examples/flower.webm" type="video/webm">
+      <source src="/media/examples/flower.mp4" type="video/mp4">
+      Sorry, your browser doesn't support embedded videos.
+    </video>
+    <p>These are actually implemented using HTML elements, but you can't see or modify them, because they are in a Shadow DOM.</p>
+    <p>A Shadow DOM is considered to be a separate HTML Document.</p>
+    <h3>Exercise</h3>
+    <p>This page contains the same template as before. Let's append it to the document again, this time using a Shadow DOM.</p>
+    <ol>
+      <li>Create a Shadow DOM tree (aka Shadow Root)</li>
+    <textarea class="code">
+baseElement = document.querySelector("#placeholder")
+baseElement.attachShadow({mode: 'open'})  // 'closed' means it won't be visible
+    </textarea>
+      <li>Clone and add the my-button template to the Shadow DOM</li>
+    <textarea class="code">
+t = document.querySelector('#button_template')
+copyOfTemplate = t.content.cloneNode(true)
+shadowRoot = document.querySelector("#placeholder").shadowRoot
+shadowRoot.appendChild(copyOfTemplate)
+    </textarea>
+      <li>Notice how there is no styling? Contrast this to how you added the template the last time:</li>
+    <textarea class="code">
+t = document.querySelector('#button_template')
+copyOfTemplate = t.content.cloneNode(true)
+document.body.appendChild(copyOfTemplate)
+    </textarea>
+    </ol>
+    <h3>Conclusion</h3>
+    <p>After creating step #2, if you Inspect the DOM and look at "#placeholder", you'll see an element called "#shadow-root" beneath it</p>
+    <p>In the Shadow Root you'll see the template you added. Note that if you had called "attachShadow" with "closed" instead of "open", then you would not see this. (Like with the &lt;video&gt; controls)</p>
+    <h3>Next: <a href="custom-elements.html">Custom Elements</a></h3>
+    <template id="button_template">
+      <div class="my-button">
+        <p class="my-button-name">I don't have a name</p>
+        <p>I have not pressed the button</p>
+        <button>Press me</button>
+      </div>
+    </template>
+    <hr>
+    <div id="placeholder"></div>
+  </body>
+</html>
